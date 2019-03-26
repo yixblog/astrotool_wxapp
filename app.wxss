@@ -1,0 +1,21 @@
+/**app.wxss**/
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: border-box;
+} 
+page {
+  flex: 1;
+  display: flex;
+  background: #303030;
+  color: #fff;
+}
+
+.page{
+  width:100%;
+  padding: 15rpx;
+}

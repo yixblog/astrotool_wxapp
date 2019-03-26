@@ -1,0 +1,82 @@
+//app.js
+App({
+  onLaunch: function() {
+    // 展示本地存储能力
+
+    this.checkAuth();
+  },
+  checkAuth(completeCallback) {
+    let thisApp = this;
+    if (!this.authToken) {
+      wx.login({
+        success: (res) => {
+          let code = res.code;
+          console.log('auth code:' + code);
+          wx.request({
+            url: thisApp.globalData.host + '/auth/wxapp/login', // 目标服务器url
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            data: {
+              code: code
+            },
+            success: (res) => {
+              thisApp.globalData.authToken = res.data.token;
+              if (typeof completeCallback == 'function') {
+                completeCallback();
+              }
+              for (let prom of thisApp.globalData.authPromise) {
+                prom()
+              }
+            },
+            fail: (res) => {
+              wx.showModal({
+                content: '服务暂不可用，请联系开发者'
+              })
+            }
+          });
+        },
+      });
+    }
+  },
+  requestWithAuth(requestObj) {
+    let thisApp = this;
+
+    function process() {
+      requestObj.header = requestObj.header || {};
+      requestObj.header['x-auth-token'] = thisApp.globalData.authToken;
+      requestObj.fail = (res) => {
+        if (res.status == 401) {
+          thisApp.checkAuth(() => {
+            thisApp.requestWithAuth(requestObj);
+          })
+        } else {
+          if (res.data) {
+            wx.showModal({
+              title: res.data.error_code,
+              content: res.data.message
+            });
+          } else {
+            wx.showModal({
+              title: 'HTTP ERROR',
+              content: '网络错误:' + res.status
+            })
+          }
+
+        }
+      };
+      wx.request(requestObj);
+    }
+    if (this.globalData.authToken) {
+      process()
+    } else {
+      this.globalData.authPromise.push(process);
+    }
+  },
+  globalData: {
+    host: "https://miniapp.yixastro.com",
+    authPromise: [],
+    rootLinks: {}
+  }
+})

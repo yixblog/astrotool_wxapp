@@ -1,0 +1,27 @@
+<view class="page">
+
+  <list class="location-list">
+    <block class="location" wx:for="{{locations}}" wx:key="{{item.location_id}}">
+      <list-item align="middle" onClick="displayNavOperations" index="{{index}}" data-locationid="{{item.location_id}}" arrow="{{item.arrow}}">
+        {{item.name}}
+        <text class="point">{{item.position}}</text>
+      </list-item>
+    </block>
+  </list>
+  <button type="primary" class="add_btn" onTap="addLocation">添加地理位置</button>
+  <popup show="{{showLocationMenu}}" position="right" onClose="closeLocationMenu">
+    <view class="popup-container">
+      <view class="popup-title" wx:if="{{activeLocation.editname}}">
+        <input type="text" placeholder="输入新名称" value="{{activeLocation.name}}" confirm-type="send" onConfirm="submitNewName" onBlur="quitEditName" />
+      </view>
+      <view class="popup-title" wx:else onTap="editNameClick">
+        <text>{{activeLocation.name}}</text>
+        <image src="/images/edit.svg" mode="aspectFit" />
+      </view>
+      <map id="map" class="map" longitude="{{map.longitude}}" latitude="{{map.latitude}}" setting="{{map.setting}}" markers="{{map.markers}}"></map>
+      <button type="primary" plain onTap="openSevenTimer">晴天钟</button>
+      <button type="warn" plain onTap="deleteLocation">删除</button>
+    </view>
+
+  </popup>
+</view>
