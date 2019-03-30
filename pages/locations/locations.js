@@ -38,7 +38,8 @@ Page({
   },
   displayNavOperations(env) {
     console.debug('list item clicked', env);
-    let clickedLocation = this.data.locations[env.index];
+    let clickedLocationId = env.detail.locationid;
+    let clickedLocation = this.data.locations.filter(locate=>locate.locationId===clickedLocationId)[0];
     let map = {
       longitude: clickedLocation.longitude,
       latitude: clickedLocation.latitude,

@@ -1,0 +1,126 @@
+<view class="loading-panel" wx:if="{{loading}}">
+  Loading data...
+</view>
+<view class="content" wx:else>
+  <view class="tabs">
+    <view class="tabs-bar">
+      <view wx:for="{{tabs}}" class="tab-item {{activeTab===index?'active':''}}" onTap="switchTab" data-index="{{index}}">{{item.title}}</view>
+    </view>
+    <swiper duration="{{300}}" current="{{activeTab}}" onChange="swiperChanged">
+      <swiper-item>
+        <view>
+        <view class="gen-time">生成时间：{{astro.init_time}}</view>
+        <block wx:for="{{astro.dates}}" wx:for-item="dateitem">
+          <view class="row date-row">{{dateitem.shortdate}}</view>
+          <view class="row hour-row">
+            <view class="column"></view>
+            <view class="column" wx:for="{{astro.hourColumns}}">{{item}}</view>
+          </view>
+          <view class="row">
+            <view class="column">云</view>
+            <view class="column" wx:for="{{dateitem.series}}">
+              <view wx:if="{{item.nodata}}"></view>
+              <view class="cloud cloud-{{item.cloudcover}}" wx:else></view>
+            </view>
+          </view>
+          <view class="row">
+            <view class="column">视宁</view>
+            <view class="column" wx:for="{{dateitem.series}}">
+              <view wx:if="{{item.nodata}}"></view>
+              <view class="seeing seeing-{{item.seeing}}" wx:else></view>
+            </view>
+          </view>
+          <view class="row">
+            <view class="column">透明度</view>
+            <view class="column" wx:for="{{dateitem.series}}">
+              <view wx:if="{{item.nodata}}"></view>
+              <view class="transparency transparency-{{item.transparency}}" wx:else></view>
+            </view>
+          </view>
+          <view class="row">
+            <view class="column">气温℃</view>
+            <view class="column" wx:for="{{dateitem.series}}">
+              <view wx:if="{{item.nodata}}"></view>
+              <view style="color:{{item.tempColor}}" wx:else>{{item.temp2m}}</view>
+            </view>
+          </view>
+          <view class="row">
+            <view class="column">湿度</view>
+            <view class="column" wx:for="{{dateitem.series}}">
+              <view wx:if="{{item.nodata}}"></view>
+              <view class="rh rh-{{item.rhLevel}}" wx:else></view>
+            </view>
+          </view>
+          <view class="row">
+            <view class="column">雨雪</view>
+            <view class="column" wx:for="{{dateitem.series}}">
+              <view class="astro-weather rain" wx:if="{{item.prec_type==='rain'}}"></view>
+              <view class="astro-weather snow" wx:if="{{item.prec_type==='snow'}}"></view>
+            </view>
+          </view>
+          <view class="row">
+            <view class="column">不稳定</view>
+            <view class="column" wx:for="{{dateitem.series}}">
+              <view wx:if="{{item.nodata}}"></view>
+              <view class="lift lift-{{item.liftLevel}}" wx:else></view>
+            </view>
+          </view>
+          <view class="row">
+            <view class="column">大风</view>
+            <view class="column" wx:for="{{dateitem.series}}">
+              <view wx:if="{{item.nodata}}"></view>
+              <view class="wind wind-{{item.wind10m.level}}" wx:else></view>
+            </view>
+          </view>
+        </block>
+        </view>
+      </swiper-item>
+      <swiper-item>
+        <view>
+        <view class="gen-time">生成时间：{{civil.init_time}}</view>
+        <view class="row hour-row">
+          <view class="column"></view>
+          <view class="column" wx:for="{{civil.hourColumns}}">{{item}}</view>
+        </view>
+        <view class="row civil-row" wx:for="{{civil.dates}}" wx:for-item="dateitem">
+          <view class="column">
+              <view class="line">{{dateitem.shortdate}}</view>
+              <view class="line">{{dateitem.weekday}}</view>
+            </view>
+          <view class="column" wx:for="{{dateitem.series}}">
+            <view wx:if="{{item.nodata}}"></view>
+            <view wx:else>
+              <view class="civil-icon civil-{{item.weatherType}} civil-time-{{item.weatherTime}}"></view>
+              <view class="civil-info" style="color:{{item.tempColor}}">{{item.temp2m}}</view>
+              <view class="civil-info">{{item.rh2m}}</view>
+            </view>
+          </view>
+        </view>
+        </view>
+      </swiper-item>
+      <swiper-item>
+        <view>
+          <view class="gen-time">生成时间：{{two.init_time}}</view>
+          <view class="row civil-row" wx:for="{{two.dates}}" wx:for-item="dateitem">
+            <view class="column">
+              <view class="line">{{dateitem.shortdate}}</view>
+              <view class="line">{{dateitem.weekday}}</view>
+            </view>
+            <view class="column" wx:for="{{dateitem.series}}">
+              <view wx:if="{{item.nodata}}"></view>
+              <view wx:else>
+                <view class="civil-icon civil-{{item.weatherType}}"></view>
+              </view>
+            </view>
+            <view class="column">
+              <view class="line">{{dateitem.temp2m.min||''}}℃-{{dateitem.temp2m.max||''}}℃</view>
+              <view class="line">{{dateitem.rhContent}}</view>
+            </view>
+
+          </view>
+        </view>
+      </swiper-item>
+    </swiper>
+  </view>
+  
+</view>

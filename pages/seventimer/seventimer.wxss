@@ -1,0 +1,302 @@
+.loading-panel{
+  height:100%;
+  width:100%;
+  text-align: center;
+  vertical-align: middle;
+}
+.content{
+  width: 100%;
+}
+.gen-time{
+  font-size: 0.3rem;
+  width: 100%;
+  text-align: center;
+  padding:5rpx 0;
+}
+.tabs{
+  padding-top:80rpx;
+}
+.tabs-bar{
+  display:flex;
+  border-bottom: 1px solid #888;
+  position: fixed;
+  z-index:999;
+  width:100%;
+  background:#333;
+  height:80rpx;
+  top:0;
+}
+.tabs-bar>.tab-item{
+  flex:1;
+  display:block;
+  padding:20rpx;
+  text-align: center;
+}
+.tabs-bar>.tab-item.active{
+  font-weight: bold;
+  color: #aa0;
+}
+.row{
+  width:100%;
+  display:flex;
+  background: #000;
+  padding:3rpx 0;
+  min-height:46rpx;
+}
+.row>.column{
+  flex:1;
+  display:block;
+  text-align: center;
+  font-size: 0.2rem;
+}
+.row>.column>.line{
+  display:block;
+  width:100%;
+  text-align: center;
+  padding:2rpx 0;
+}
+.row.date-row{
+  background:#700;
+  padding: 5rpx 10rpx;
+  font-size: 0.4rem;
+}
+.row.hour-row{
+  font-size:0.2rem;
+  background: #000;
+}
+.row.civil-row{
+  height:120rpx;
+}
+.row.civil-row .civil-icon{
+  height: 70rpx;
+  width:70rpx;
+  display: block;
+  margin: 0 auto;
+  background-size:auto 100%;
+  background-repeat: no-repeat;
+}
+.row.civil-row .civil-info{
+  display: block;
+  font-size: 0.2rem;
+  width: 100%;
+  text-align: center
+}
+.cloud{
+  display: inline-block;
+  background: url(/images/about_astro_cloud.png) no-repeat;
+  background-size: auto 100%;
+  height:40rpx;
+  width:40rpx;
+}
+.cloud.cloud-1{
+  background-position: 0 0;
+}
+.cloud.cloud-2{
+  background-position: 12.5% 0;
+}
+.cloud.cloud-3{
+  background-position: 25% 0;
+}
+.cloud.cloud-4{
+  background-position: 37.5% 0;
+}
+.cloud.cloud-5{
+  background-position: 50% 0;
+}
+.cloud.cloud-6{
+  background-position: 62.5% 0;
+}
+.cloud.cloud-7{
+  background-position: 75% 0;
+}
+.cloud.cloud-8{
+  background-position: 87.5% 0;
+}
+.cloud.cloud-9{
+  background-position: 100% 0;
+}
+.seeing{
+  display: inline-block;
+  background: url(/images/about_astro_seeing.png) no-repeat;
+  background-size: auto 100%;
+  height:40rpx;
+  width:40rpx;
+}
+.seeing.seeing-1{
+  background-position: 0 0;
+}
+.seeing.seeing-2{
+  background-position: 14.29% 0;
+}
+.seeing.seeing-3{
+  background-position: 28.57% 0;
+}
+.seeing.seeing-4{
+  background-position: 42.86% 0;
+}
+.seeing.seeing-5{
+  background-position: 57.14% 0;
+}
+.seeing.seeing-6{
+  background-position: 71.43% 0;
+}
+.seeing.seeing-7{
+  background-position: 85.71% 0;
+}
+.seeing.seeing-8{
+  background-position: 100% 0;
+}
+.transparency{
+  display: inline-block;
+  background: url(/images/about_astro_transparency.png) no-repeat;
+  background-size: auto 100%;
+  height:40rpx;
+  width:40rpx;
+}
+.transparency.transparency-1{
+  background-position: 0 0;
+}
+.transparency.transparency-2{
+  background-position: 14.29% 0;
+}
+.transparency.transparency-3{
+  background-position: 28.57% 0;
+}
+.transparency.transparency-4{
+  background-position: 42.86% 0;
+}
+.transparency.transparency-5{
+  background-position: 57.14% 0;
+}
+.transparency.transparency-6{
+  background-position: 71.43% 0;
+}
+.transparency.transparency-7{
+  background-position: 85.71% 0;
+}
+.transparency.transparency-8{
+  background-position: 100% 0;
+}
+.rh{
+  display: inline-block;
+  background: url(/images/about_astro_rh.png) no-repeat;
+  background-size: auto 100%;
+  height:40rpx;
+  width:40rpx;
+}
+.rh.rh-0{
+  background-position: -100% 0;
+}
+.rh.rh-1{
+  background-position: 0 0;
+}
+.rh.rh-2{
+  background-position: 50% 0;
+}
+.rh.rh-3{
+  background-position: 100% 0;
+}
+.wind{
+  display: inline-block;
+  background: url(/images/about_astro_wind.png) no-repeat;
+  background-size: auto 100%;
+  height:40rpx;
+  width:40rpx;
+}
+.wind.wind-0{
+  background-position: -100% 0;
+}
+.wind.wind-1{
+  background-position: 0 0;
+}
+.wind.wind-2{
+  background-position: 50% 0;
+}
+.wind.wind-3{
+  background-position: 100% 0;
+}
+.lift{
+  display: inline-block;
+  background: url(/images/about_astro_unstable.png) no-repeat;
+  background-size: auto 100%;
+  height:40rpx;
+  width:40rpx;
+}
+.lift.lift-0{
+  background-position: -100% 0;
+}
+.lift.lift-1{
+  background-position: 0 0;
+}
+.lift.lift-2{
+  background-position: 50% 0;
+}
+.lift.lift-3{
+  background-position: 100% 0;
+}
+.astro-weather{
+  display: inline-block;
+  background: url(/images/about_astro_rainsnow.png) no-repeat;
+  background-size: auto 100%;
+  height:40rpx;
+  width:40rpx;
+}
+.astro-weather.rain{
+  background-position: 0 0;
+}
+.astro-weather.snow{
+  background-position: 100% 0;
+}
+.civil-icon.civil-time-day{
+  background-position: 0 0;
+}
+.civil-icon.civil-time-night{
+  background-position: 100% 0;
+}
+
+.civil-icon.civil-clear{
+  background-image:url(/images/about_civil_clear.png)
+}
+.civil-icon.civil-cloudy{
+  background-image:url(/images/about_civil_cloudy.png)
+}
+.civil-icon.civil-humid{
+  background-image:url(/images/about_civil_fog.png)
+}
+.civil-icon.civil-ishower{
+  background-image:url(/images/about_civil_ishower.png)
+}
+.civil-icon.civil-lightrain{
+  background-image:url(/images/about_civil_lightrain.png)
+}
+.civil-icon.civil-lightsnow{
+  background-image:url(/images/about_civil_lightsnow.png)
+}
+.civil-icon.civil-mcloudy{
+  background-image:url(/images/about_civil_mcloudy.png)
+}
+.civil-icon.civil-oshower{
+  background-image:url(/images/about_civil_oshower.png)
+}
+.civil-icon.civil-pcloudy{
+  background-image:url(/images/about_civil_pcloudy.png)
+}
+.civil-icon.civil-rain{
+  background-image:url(/images/about_civil_rain.png)
+}
+.civil-icon.civil-rainsnow{
+  background-image:url(/images/about_civil_rainsnow.png)
+}
+.civil-icon.civil-snow{
+  background-image:url(/images/about_civil_snow.png)
+}
+.civil-icon.civil-tsrain{
+  background-image:url(/images/about_civil_tsrain.png)
+}
+.civil-icon.civil-tstorm{
+  background-image:url(/images/about_civil_tstorm.png)
+}
+.civil-icon.civil-windy{
+  background-image:url(/images/about_civil_windy.png)
+}
+

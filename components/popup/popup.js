@@ -1,4 +1,8 @@
 Component({
+  properties: {
+    show: Boolean,
+    position: String
+  },
   data: {
     className: '',
     show: false,
@@ -9,11 +13,7 @@ Component({
   },
   methods: {
     onMaskTap: function onMaskTap() {
-      var onClose = this.props.onClose;
-
-      if (onClose) {
-        onClose();
-      }
+      this.triggerEvent('popupclose',{})
     }
   }
 });

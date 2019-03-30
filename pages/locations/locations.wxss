@@ -9,7 +9,7 @@
   display: block;
 }
 
-.am-list-content .point {
+.location-list-item .point {
   color: #777;
   float: right;
   font-size: 0.9em;
