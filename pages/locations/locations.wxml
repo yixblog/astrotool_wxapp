@@ -17,7 +17,7 @@
       </view>
       <view class="popup-title" wx:else bindtap="editNameClick">
         <text>{{activeLocation.name}}</text>
-        <image src="https://images-1258557364.cos-website.ap-beijing.myqcloud.com/miniapp/images/edit.svg" mode="aspectFit" />
+        <image src="/images/edit.svg" mode="aspectFit" />
       </view>
       <map id="map" class="map" longitude="{{map.longitude}}" latitude="{{map.latitude}}" setting="{{map.setting}}" markers="{{map.markers}}"></map>
       <button type="primary" plain bindtap="openSevenTimer">晴天钟</button>
