@@ -5,7 +5,12 @@ Component({
    * 组件的属性列表
    */
   properties: {
-
+    align: Boolean,
+    disabled: Boolean,
+    multipleLine: Boolean,
+    wrap: Boolean,
+    arrow: Boolean,
+    itemid: String
   },
 
   /**
@@ -17,15 +22,6 @@ Component({
     multipleLine: false,
     wrap: false
   },
-  created() {
-    this.dataset = {};
-
-    for (var key in this.data) {
-      if (/data-/gi.test(key)) {
-        this.dataset[key.replace(/data-/gi, '')] = this.data[key];
-      }
-    }
-  },
 
   /**
    * 组件的方法列表
@@ -36,7 +32,7 @@ Component({
         disabled = _this$props.disabled;
 
       if (!disabled) {
-        this.triggerEvent('itemtap',this.dataset)
+        this.triggerEvent('itemtap',{itemid: this.data.itemid})
       }
     }
   }

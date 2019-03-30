@@ -2,13 +2,14 @@
 
   <list class="location-list">
     <block class="location" wx:for="{{locations}}" wx:key="{{item.locationId}}">
-      <list-item align="middle" binditemtap="displayNavOperations" index="{{index}}" data-locationid="{{item.locationId}}" arrow="{{item.arrow}}" class-name="location-list-item">
+      <list-item align="middle" binditemtap="displayNavOperations" index="{{index}}" itemid="{{item.locationId}}" arrow="{{item.arrow}}" class-name="location-list-item">
         {{item.name}}
         <text class="point">{{item.position}}</text>
       </list-item>
     </block>
   </list>
   <button type="primary" class="add_btn" bindtap="addLocation">添加地理位置</button>
+  <button type='primary' class='add_btn' bindtap='loadLocations'></button>
   <popup show="{{showLocationMenu}}" position="right" bindpopupclose="closeLocationMenu">
     <view class="popup-container">
       <view class="popup-title" wx:if="{{activeLocation.editname}}">
@@ -16,7 +17,7 @@
       </view>
       <view class="popup-title" wx:else bindtap="editNameClick">
         <text>{{activeLocation.name}}</text>
-        <image src="/images/edit.svg" mode="aspectFit" />
+        <image src="https://images-1258557364.cos-website.ap-beijing.myqcloud.com/miniapp/images/edit.svg" mode="aspectFit" />
       </view>
       <map id="map" class="map" longitude="{{map.longitude}}" latitude="{{map.latitude}}" setting="{{map.setting}}" markers="{{map.markers}}"></map>
       <button type="primary" plain bindtap="openSevenTimer">晴天钟</button>

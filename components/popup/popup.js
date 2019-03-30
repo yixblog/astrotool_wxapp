@@ -1,7 +1,22 @@
 Component({
   properties: {
     show: Boolean,
-    position: String
+    position: {
+      type: String,
+      value: 'bottom'
+    },
+    mask: {
+      type: Boolean,
+      value: true
+    },
+    animation: {
+      type: Boolean,
+      value: true
+    },
+    disableScroll: {
+      type: Boolean,
+      value: true
+    }
   },
   data: {
     className: '',

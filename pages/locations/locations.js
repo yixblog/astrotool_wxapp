@@ -14,6 +14,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad() {
+    this.setData({
+      showLocationMenu: false
+    })
+    this.loadLocations()
+  },
+  loadLocations(){
     let pageThis = this;
     app.requestWithAuth({
       url: app.globalData.rootLinks.locations.href,
@@ -27,8 +33,7 @@ Page({
           location.arrow = true;
         }
         pageThis.setData({
-          locations: locations,
-          showLocationMenu: false
+          locations: locations
         });
         for (let link of res.data.links) {
           pageThis.links[link.rel] = link;
@@ -38,7 +43,7 @@ Page({
   },
   displayNavOperations(env) {
     console.debug('list item clicked', env);
-    let clickedLocationId = env.detail.locationid;
+    let clickedLocationId = env.detail.itemid;
     let clickedLocation = this.data.locations.filter(locate=>locate.locationId===clickedLocationId)[0];
     let map = {
       longitude: clickedLocation.longitude,
@@ -156,7 +161,8 @@ Page({
       success: (res) => {
         pageThis.setData({
           'activeLocation.name': newName
-        })
+        });
+        pageThis.loadLocations();
       }
     })
   },
