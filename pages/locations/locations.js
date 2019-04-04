@@ -17,9 +17,9 @@ Page({
     this.setData({
       showLocationMenu: false
     })
-    this.loadLocations()
+    this.loadMyLocations()
   },
-  loadLocations(){
+  loadMyLocations(){
     let pageThis = this;
     app.requestWithAuth({
       url: app.globalData.rootLinks.locations.href,
@@ -53,7 +53,7 @@ Page({
         id: clickedLocation.location_id,
         longitude: clickedLocation.longitude,
         latitude: clickedLocation.latitude,
-        iconPath: '/images/icon-location.png'
+        iconPath: 'https://images-1258557364.cos-website.ap-beijing.myqcloud.com/miniapp/images/icon-location.png'
       }],
       setting: {
         gestureEnable: 1,
@@ -70,6 +70,21 @@ Page({
       showLocationMenu: true,
       activeLocation: clickedLocation
     });
+
+  },
+  showSharedLocations() {
+    wx.getLocation({
+      success: locate => {
+        wx.navigateTo({
+          url: '/pages/shared_locations/shared_locations?lat=' + locate.latitude + '&lon=' + locate.longitude
+        })
+      },
+      fail: res => {
+        wx.navigateTo({
+          url: '/pages/shared_locations/shared_locations'
+        })
+      }
+    })
 
   },
   editNameClick() {
@@ -115,6 +130,44 @@ Page({
       }
     })
   },
+  shareLocation() {
+    let lnks = this.data.activeLocation.links.filter(lnkItem => lnkItem.rel === 'modify_share');
+    if (!lnks.length) {
+      return;
+    }
+    let lnk = lnks[0]
+    let pageThis = this;
+    let curShareFlag = this.data.activeLocation.shareFlag;
+    if (!curShareFlag) {
+      wx.showModal({
+        title: '提示',
+        content: '共享地理位置意味着其他用户可以添加当前地点到自己的地点列表',
+        success: res => {
+          if (res.confirm) {
+            modifyShareFlag();
+          }
+        }
+      })
+    } else {
+      modifyShareFlag();
+    }
+
+    function modifyShareFlag() {
+      console.info('modify share flag to:' + !curShareFlag)
+      app.requestWithAuth({
+        url: lnk.href,
+        method: 'POST',
+        data: { share: !curShareFlag },
+        success: res => {
+          pageThis.loadMyLocations()
+          pageThis.setData({
+            'activeLocation.shareFlag': !curShareFlag
+          })
+        }
+      })
+    }
+
+  },
   deleteLocation() {
     let lnks = this.data.activeLocation.links.filter(lnkItem => lnkItem.rel === 'del');
     if (!lnks.length) {
@@ -130,7 +183,7 @@ Page({
           app.requestWithAuth({
             url: lnk.href,
             method: 'POST',
-            success: res => pageThis.onLoad()
+            success: res => pageThis.loadMyLocations()
           })
         }
       }

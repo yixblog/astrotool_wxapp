@@ -2,12 +2,18 @@
   "pages": [
     "pages/index/index",
     "pages/locations/locations",
-    "pages/seventimer/seventimer"
+    "pages/seventimer/seventimer",
+    "pages/shared_locations/shared_locations"
   ],
   "window": {
     "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#333",
     "navigationBarTitleText": "佚仙天文",
     "navigationBarTextStyle": "white"
+  },
+  "permission":{
+    "scope.userLocation":{
+      "desc":"您的定位信息仅用于计算共享地点之间的距离，本应用不会存储您的定位信息"
+    }
   }
 }

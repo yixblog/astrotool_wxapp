@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "popup": "/components/popup/popup",
+    "list": "/components/list/list",
+    "list-item": "/components/list/list-item/list-item"
+  }
+}
