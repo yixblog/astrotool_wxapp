@@ -1,71 +1,47 @@
-/**app.wxss**/
-.container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 200rpx 0;
-  box-sizing: border-box;
-} 
-page {
-  flex: 1;
-  display: flex;
-  background: #303030;
-  color: #fff;
+@import '/miniprogram_npm/weui-miniprogram/weui-wxss/dist/style/weui.wxss';
+page{
+  background: #333;
+  color: #EEE;
 }
-
-.page{
-  width:100%;
-  padding: 15rpx;
+page,view,scroll-view,swiper,swiper-item,movable-area,movable-view,cover-view,cover-image,icon,text,rich-text,progress,button,checkbox-group,checkbox,form,input,label,picker,picker-view,radio-group,radio,slider,switch,textarea,navigator,functional-page-navigator,image,video,camera,live-player,live-pusher,map,canvas,open-data,web-view,ad,mp-cell{
+    box-sizing: border-box;
 }
-
-.margin-bottom{
-  margin-bottom: 15rpx;
-}
-
-.location-list {
+.heweather-ico{
+  height: 70rpx;
+  width: 70rpx;
   display: block;
+  margin: 0 auto;
+  background-size: auto 100%;
+  background-repeat: no-repeat;
 }
-
-.location-list-item .point {
-  color: #777;
-  float: right;
-  font-size: 0.9em;
+.btn-group{
+  position: relative;
 }
-
-.map {
-  width: 500rpx !important;
-  height: 400rpx !important;
-  margin-bottom: 15px;
+.btn-group::after{
+  content: '';
+  display: block;
+  clear:both;
 }
-
-.popup-container {
-  background: #000;
-  height: 100%;
-  width: 500rpx;
+.btn{
+  padding: 5px;
+  position: relative;
+  float: left;
+  border: 1px solid #fff;
+  border-radius: 3px;
 }
-
-.popup-container .popup-title {
-  color: #aaa;
-  font-weight: bold;
-  text-align: center;
-  padding: 10px 0;
-  width: 100%;
-  background: #500;
+.btn.btn-warning{
+  color: red;
 }
-
-.popup-container .popup-title title {
-  max-width: 340rpx;
+.btn-group>.btn{
+  border-radius: 0;
+  border: 1px 1px 0 1px solid #fff;
 }
-
-.popup-container .popup-title image {
-  height: 24rpx;
-  width: 24rpx;
-  margin-left: 5rpx;
-  display: inline-block;
+.btn-group>.btn:last-child{
+  border-right: 1px solid #fff;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
 }
-
-.popup-container button {
-  margin-bottom: 15rpx;
+.btn-group>.btn:first-child{
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
 }

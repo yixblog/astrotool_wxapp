@@ -1,7 +1,0 @@
-/* pages/locations/locations.wxss */
-
-.add_btn {
-  margin-top: 15rpx;
-  display: block;
-}
-

@@ -1,0 +1,109 @@
+<view class="container">
+  <view class="header page-part">
+    <view class="location">
+      <image src="/images/location.svg" class="icon"></image>
+      {{currentLocation.position}}
+    </view>
+
+  </view>
+  <view class="astro-box page-part">
+    <view class="sun part">
+      <view class="img-box">
+        <image src="/images/sunrise.svg" class="symbol" mode="widthFix"></image>
+      </view>
+      <view class="data-box">
+        <view>↑: {{daily[0].sr}}</view>
+        <view>↓: {{daily[0].ss}}</view>
+      </view>
+    </view>
+    <view class="moon part">
+
+      <view class="data-box">
+        <view>↑: {{daily[0].mr}}</view>
+        <view>↓: {{daily[0].ms}}</view>
+      </view>
+      <view class="img-box">
+        <image src="/images/moonrise.svg" class="symbol" mode="widthFix"></image>
+      </view>
+    </view>
+  </view>
+  <view class="weather-box page-part" wx:if="{{now!=null}}">
+    <view class="weather-cond">
+      <image class="heweather-ico" mode="widthFix" src="https://images-1258557364.cos.ap-beijing.myqcloud.com/miniapp/images/heweather/{{now.cond_code}}.png"></image>
+      <view class="weather-cond-name">{{now.cond_txt}}</view>
+    </view>
+    <view class="weather-detail">
+      <view class="row">
+        <view class="col">🌡{{now.tmp}}℃</view>
+        <view class="col">💧{{now.hum}}%</view>
+      </view>
+      <view class="row">
+        <view class="col">
+          <view class="arrow" style="transform: rotate({{now.wind_deg}}deg)">⬇</view>
+        </view>
+        <view class="col">{{now.wind_sc}}级</view>
+        <view class="col">{{now.wind_spd}}km/h</view>
+      </view>
+      <view class="row">
+        <view class="col">
+          👁{{now.pres}}km
+        </view>
+        <view class="col">☁{{now.cloud}}%</view>
+      </view>
+    </view>
+  </view>
+  <view class="toolbox page-part">
+    <view class="tool" bindtap="openSevenTimer">
+      <image class="icon" src="/images/7timer.png" mode="widthFix"></image>
+      <view class="text">晴天钟</view>
+    </view>
+    <view class="tool" wx:if="{{!currentLocation.default_flag && currentLocation.self_flag}}" bindtap="markDefault">
+      <image src="/images/correct.svg" class="icon" mode="widthFix"></image>
+      <view class="text">设为默认</view>
+    </view>
+    <view class="tool" bindtap="showModifyNameDialog" wx:if="{{currentLocation.self_flag}}">
+      <image src="/images/edit.svg" class="icon" mode="widthFix"></image>
+      <view class="text">修改名称</view>
+    </view>
+
+
+    <button class="tool" open-type="share">
+      <image src="/images/share.svg" class="icon" mode="widthFix"></image>
+      <view class="text">分享</view>
+    </button>
+
+    <view class="tool" bindtap="showConfirmDelete" wx:if="{{currentLocation.self_flag}}">
+      <image src="/images/trush.svg" class="icon" mode="widthFix"></image>
+      <view class="text">删除</view>
+    </view>
+    <view class="tool" bindtap="showChooseLocation">
+      <image src="/images/switch.svg" class="icon" mode="widthFix"></image>
+      <view class="text">选择地点</view>
+    </view>
+    <view class="tool" bindtap="saveToMyLocation"  wx:if="{{!currentLocation.self_flag}}">
+      <image src="/images/star.svg" class="icon" mode="widthFix"></image>
+      <view class="text">收藏地点</view>
+    </view>
+    <view class="tool" bindtap="addLocation">
+      <image src="/images/location_green.svg" class="icon" mode="widthFix"></image>
+      <view class="text">新增地点</view>
+    </view>
+  </view>
+  <mp-cells data-weui-theme="dark">
+    <mp-cell style="font-size: 0.8rem" wx:key="date" wx:for="{{daily}}">
+      <view>{{item.cond_txt_d}} {{item.tmp_min}}℃~{{item.tmp_max}}℃</view>
+      <view slot="footer">{{item.date}}</view>
+    </mp-cell>
+  </mp-cells>
+
+  <map class="page-part" longitude="{{map.longitude}}" latitude="{{map.latitude}}" setting="{{map.setting}}" markers="{{map.markers}}" wx:if="{{map!=null}}"></map>
+
+  <mp-dialog data-weui-theme="dark" title="修改名称" show="{{modifyDialog.show}}" bindbuttontap="commitModifyName" buttons="{{[{text:'取消'},{text:'提交'}]}}">
+    <input value="{{currentLocation.name}}" bindinput="modifyCacheInputName"></input>
+    <view wx:if="{{modifyDialog.error}}" style="color: red">{{modifyDialog.error}}</view>
+  </mp-dialog>
+  <mp-actionSheet data-weui-theme="dark" bindactiontap="viewChooseLocation" show="{{locationChoose.show}}" actions="{{locationChoose.actions}}" title="选择地点"></mp-actionSheet>
+  <mp-dialog data-weui-theme="dark" title="确认删除地点" show="{{deleteDialog.show}}" bindbuttontap="confirmDelete" buttons="{{[{text:'取消'},{text:'确认'}]}}">
+    <view value="确认删除：{{currentLocation.name}}"></view>
+  </mp-dialog>
+</view>

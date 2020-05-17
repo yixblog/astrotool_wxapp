@@ -378,7 +378,7 @@
   background-image: url(https://images-1258557364.cos-website.ap-beijing.myqcloud.com/miniapp/images/about_civil_tsrain.png);
 }
 
-.civil-icon.civil-tstorm {
+.civil-icon.civil-tstorm,.civil-icon.civil-ts {
   background-image: url(https://images-1258557364.cos-website.ap-beijing.myqcloud.com/miniapp/images/about_civil_tstorm.png);
 }
 
