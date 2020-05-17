@@ -193,10 +193,11 @@ Page({
   },
 
   confirmDelete(e) {
+    this.setData({
+      'deleteDialog.show': false
+    });
     if (e.detail.index === 1) {
-      this.setData({
-        'deleteDialog.show': false
-      });
+
       let pageThis = this;
       app.applyRelWithAuth(this.data.currentLocation, {
         rel: 'del',
@@ -256,6 +257,12 @@ Page({
         }
       });
 
+    } else {
+      pageThis.setData({
+        modifyDialog: {
+          show: false
+        }
+      })
     }
   },
 })
