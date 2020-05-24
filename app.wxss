@@ -45,3 +45,8 @@ page,view,scroll-view,swiper,swiper-item,movable-area,movable-view,cover-view,co
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
 }
+.charts{
+  width: 100%;
+  display: block;
+  height: 240px;
+}

@@ -1,7 +1,8 @@
 {
   "pages": [
     "index/index",
-    "pages/seventimer/seventimer"
+    "pages/seventimer/seventimer",
+    "pages/observatory/observatory"
   ],
   "window": {
     "backgroundTextStyle": "dark",

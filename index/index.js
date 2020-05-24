@@ -1,5 +1,6 @@
 const app = getApp()
-
+import uCharts from '../utils/u-charts.min.js';
+let hourlyChart;
 Page({
   data: {
     modifyDialog: {
@@ -10,22 +11,36 @@ Page({
     },
     deleteDialog: {
       show: false
+    },
+    locationStore: {
+      show: false,
+      actions: [{
+          text: '复制为我的地点（可修改）',
+          value: 'COPY'
+        },
+        {
+          text: '收藏为我的地点（无法修改，可同步对方修改）',
+          value: 'LIKE'
+        }
+      ]
     }
   },
   onShareAppMessage() {
-    if (this.data.currentLocation == null) {
+    if (app.globalData.currentLocation == null) {
 
       return {
         title: '佚仙天文',
-        path: '/index'
+        path: '/index/index'
       };
     }
     return {
-      title: this.data.currentLocation.name + ' 天气情况',
-      path: '/index?location_id=' + this.data.currentLocation.location_id
+      title: app.globalData.currentLocation.name + ' 天气情况',
+      path: '/index/index?location_id=' + app.globalData.currentLocation.location_id
     }
   },
-  onLoad: function(query) {
+  onLoad(query) {
+    this.cWidth = wx.getSystemInfoSync().windowWidth;
+    this.cHeight = 240;
     if (query.location_id) {
       this.loadMyLocations(query.location_id, true);
     } else {
@@ -35,48 +50,35 @@ Page({
   },
   loadMyLocations(locationId, shareFlag) {
     let pageThis = this;
-    app.requestWithAuth({
-      rootRel: 'locations',
-      method: 'GET',
-      query: {
-        addition_location_id: shareFlag ? locationId : null
-      },
-      success: (res) => {
-        let locations = res.data.locations;
-        for (let location of locations) {
-          let longitudeSymbol = location.longitude > 0 ? 'E' : 'W';
-          let latitudeSymbol = location.latitude > 0 ? 'N' : 'S';
-          location.position = location.longitude.toFixed(4) + longitudeSymbol + ',' + location.latitude.toFixed(4) + latitudeSymbol;
-          location.arrow = true;
-        }
-        pageThis.setData({
-          locations: locations,
-          'locationChoose.actions': locations.map(l => {
-            return {
-              text: l.name + '[' + l.position + ']',
-              value: l.location_id
-            }
-          })
-        });
-        pageThis.links = res.data._links;
-        if (locations.length) {
-          let chosenLocation = null;
-          if (locationId != null) {
-            let chosenLocations = locations.filter(l => l.location_id === locationId);
-            if (chosenLocations.length > 0) {
-              chosenLocation = chosenLocations[0];
-            }
+    app.loadMyLocations(locationId,shareFlag,res=>{
+      let locations = app.globalData.locations;
+      pageThis.setData({
+        locations: locations,
+        'locationChoose.actions': locations.map(l => {
+          return {
+            text: l.name + '[' + l.position + ']',
+            value: l.location_id
           }
-          if (chosenLocation === null) {
-            let defaultLocations = locations.filter(l => l.default_flag);
-            chosenLocation = defaultLocations.length > 0 ? defaultLocations[0] : locations[0];
+        })
+      });
+      pageThis.links = res.data._links;
+      if (locations.length) {
+        let chosenLocation = null;
+        if (locationId != null) {
+          let chosenLocations = locations.filter(l => l.location_id === locationId);
+          if (chosenLocations.length > 0) {
+            chosenLocation = chosenLocations[0];
           }
-          pageThis.chooseLocation(chosenLocation);
-        } else {
-          pageThis.addLocation();
         }
+        if (chosenLocation === null) {
+          let defaultLocations = locations.filter(l => l.default_flag);
+          chosenLocation = defaultLocations.length > 0 ? defaultLocations[0] : locations[0];
+        }
+        pageThis.chooseLocation(chosenLocation);
+      } else {
+        pageThis.addLocation();
       }
-    })
+    });
   },
   viewChooseLocation(e) {
     if (e.detail.value) {
@@ -107,6 +109,7 @@ Page({
     wx.setNavigationBarTitle({
       title: location.name,
     });
+    app.globalData.currentLocation = location;
     pageThis.setData({
       currentLocation: location,
       map: {
@@ -151,6 +154,133 @@ Page({
         wx.hideLoading();
       }
     });
+    app.applyRelWithAuth(location, {
+      rel: 'heweather_hourly',
+      method: 'GET',
+      success: res => {
+        console.info('hourly', res.data);
+        pageThis.initHourlyChart(res.data);
+      }
+    })
+  },
+  initHourlyChart(data) {
+    let hourlyArr = data.hourly;
+    this.setData({
+      hourly: hourlyArr
+    });
+    let thisPage = this;
+    let chartObj = {
+      $this: thisPage,
+      canvasId: 'hourlyChart',
+      background: '#333',
+      legend: {
+        show: true,
+        fontColor: '#fff'
+      },
+      title: {
+        name: '小时预报'
+      },
+      type: 'mix',
+      fontSize: 11,
+      pixelRatio: 1,
+      dataLabel: true,
+      animation: true,
+      enableScroll: true,
+      categories: hourlyArr.map(dt => dt.time.substring(11)),
+      series: [{
+          name: '温度',
+          type: 'line',
+          style: 'curve',
+          color: '#f00',
+          textColor: '#f00',
+          index: 0,
+          data: hourlyArr.map(dt => parseInt(dt.tmp)),
+          format: val => val + '℃'
+        },
+        {
+          name: '湿度',
+          type: 'line',
+          style: 'curve',
+          color: '#0Ff',
+          textColor: '#0FF',
+          index: 1,
+          data: hourlyArr.map(dt => parseInt(dt.hum)),
+          format: val => val + '%'
+        },
+        {
+          name: '云量',
+          type: 'area',
+          style: 'curve',
+          color: '#fff',
+          index: 1,
+          data: hourlyArr.map(dt => parseInt(dt.cloud)),
+          format: val => val + '%'
+        },
+        {
+          name: '降水概率',
+          type: 'column',
+          index: 1,
+          data: hourlyArr.map(dt => parseInt(dt.pop)),
+          format: val => val + '%'
+        }
+      ],
+      xAxis: {
+        disableGrid: true,
+        type: 'grid',
+        gridType: 'dash',
+        itemCount: 4,
+        scrollShow: true,
+        scrollAlign: 'left',
+        boundaryGap: 'justify'
+      },
+      yAxis: {
+        showTitle: true,
+        data: [{
+            position: 'left',
+            axisLine: true,
+            title: '℃',
+            min: Math.min(...hourlyArr.map(dt => parseInt(dt.tmp)))*0.8,
+            max: Math.max(...hourlyArr.map(dt => parseInt(dt.tmp)))*1.2
+          },
+          {
+            position: 'right',
+            axisLine: true,
+            title: '%',
+            min: 0,
+            max: 100
+          }
+        ]
+      },
+      width: thisPage.cWidth,
+      height: thisPage.cHeight,
+      extra: {
+        column: {
+          width: 25
+        },
+        tooltip: {
+          bgColor: '#000000',
+          bgOpacity: 0.7,
+          gridType: 'dash',
+          dashLength: 8,
+          gridColor: '#1890ff',
+          fontColor: '#FFFFFF',
+          horizentalLine: false,
+          xAxisLabel: false,
+          yAxisLabel: true,
+          labelBgColor: '#DFE8FF',
+          labelBgOpacity: 0.95,
+          labelAlign: 'left',
+          labelFontColor: '#666666'
+        }
+      }
+    };
+    console.info('chart', chartObj)
+    hourlyChart = new uCharts(chartObj)
+  },
+  openObservatory(){
+    wx.navigateTo({
+      url: '/pages/observatory/observatory',
+    })
   },
   addLocation() {
     let thisPage = this;
@@ -169,21 +299,29 @@ Page({
     })
   },
   saveToMyLocation() {
-    let pageThis = this;
-    ap.applyRelWithAuth(this.data.currentLocation, {
-      rel: 'save',
-      method: 'POST',
-      success: res => pageThis.loadMyLocations(this.data.currentLocation.location_id)
+    this.setData({
+      'locationStore.show': true
     })
+  },
+  viewStoreLocation(e) {
+    if (e.detail.value) {
+      ap.applyRelWithAuth(this.data.currentLocation, {
+        rel: 'save',
+        method: 'POST',
+        data: {
+          mode: e.detail.value
+        },
+        success: res => pageThis.loadMyLocations(this.data.currentLocation.location_id)
+      })
+    }
   },
   openSevenTimer() {
     let lnk = this.data.currentLocation._links['7timer'];
     if (lnk === null) {
       return;
     }
-    let thisPage = this;
     wx.navigateTo({
-      url: '/pages/seventimer/seventimer?lnk=' + encodeURIComponent(lnk.href) + '&name=' + this.data.currentLocation.name
+      url: '/pages/seventimer/seventimer'
     })
   },
   showConfirmDelete() {
@@ -265,4 +403,24 @@ Page({
       })
     }
   },
+  touchMoveChart(e) {
+    if (hourlyChart) {
+      hourlyChart.scroll(e)
+    }
+  },
+  touchChart(e) {
+    if (hourlyChart) {
+      hourlyChart.scrollStart(e)
+    }
+  },
+  touchChartEnd(e) {
+    if (hourlyChart) {
+      hourlyChart.scrollEnd(e);
+      hourlyChart.showToolTip(e, {
+        format: function (item, cat) {
+          return cat + ' ' + item.name + ':' + item.data;
+        }
+      });
+    }
+  }
 })

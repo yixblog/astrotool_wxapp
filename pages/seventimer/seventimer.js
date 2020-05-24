@@ -1,26 +1,89 @@
 const app = getApp();
 const rhInfo = {
-  '-4': { content: '0%-5%', level: 0 },
-  '-3': { content: '5%-10%', level: 0 },
-  '-2': { content: '10%-15%', level: 0 },
-  '-1': { content: '15%-20%', level: 0 },
-  '0': { content: '20%-25%', level: 0 },
-  '1': { content: '25%-30%', level: 0 },
-  '2': { content: '30%-35%', level: 0 },
-  '3': { content: '35%-40%', level: 0 },
-  '4': { content: '40%-45%', level: 0 },
-  '5': { content: '45%-50%', level: 0 },
-  '6': { content: '50%-55%', level: 0 },
-  '7': { content: '55%-60%', level: 0 },
-  '8': { content: '60%-65%', level: 0 },
-  '9': { content: '65%-70%', level: 0 },
-  '10': { content: '70%-75%', level: 0 },
-  '11': { content: '75%-80%', level: 0 },
-  '12': { content: '80%-85%', level: 1 },
-  '13': { content: '85%-90%', level: 1 },
-  '14': { content: '90%-95%', level: 2 },
-  '15': { content: '95%-99%', level: 3 },
-  '16': { content: '100%', level: 3 }
+  '-4': {
+    content: '0%-5%',
+    level: 0
+  },
+  '-3': {
+    content: '5%-10%',
+    level: 0
+  },
+  '-2': {
+    content: '10%-15%',
+    level: 0
+  },
+  '-1': {
+    content: '15%-20%',
+    level: 0
+  },
+  '0': {
+    content: '20%-25%',
+    level: 0
+  },
+  '1': {
+    content: '25%-30%',
+    level: 0
+  },
+  '2': {
+    content: '30%-35%',
+    level: 0
+  },
+  '3': {
+    content: '35%-40%',
+    level: 0
+  },
+  '4': {
+    content: '40%-45%',
+    level: 0
+  },
+  '5': {
+    content: '45%-50%',
+    level: 0
+  },
+  '6': {
+    content: '50%-55%',
+    level: 0
+  },
+  '7': {
+    content: '55%-60%',
+    level: 0
+  },
+  '8': {
+    content: '60%-65%',
+    level: 0
+  },
+  '9': {
+    content: '65%-70%',
+    level: 0
+  },
+  '10': {
+    content: '70%-75%',
+    level: 0
+  },
+  '11': {
+    content: '75%-80%',
+    level: 0
+  },
+  '12': {
+    content: '80%-85%',
+    level: 1
+  },
+  '13': {
+    content: '85%-90%',
+    level: 1
+  },
+  '14': {
+    content: '90%-95%',
+    level: 2
+  },
+  '15': {
+    content: '95%-99%',
+    level: 3
+  },
+  '16': {
+    content: '100%',
+    level: 3
+  }
 };
 const weeks = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 // pages/seventimer/seventimer.js
@@ -30,10 +93,15 @@ Page({
    * 页面的初始数据
    */
   data: {
-    tabs: [
-      { title: '天文' },
-      { title: '民用' },
-      { title: '两周预报' }
+    tabs: [{
+        title: '天文'
+      },
+      {
+        title: '民用'
+      },
+      {
+        title: '两周预报'
+      }
     ],
     activeTab: 0
   },
@@ -41,14 +109,15 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-    let url = decodeURIComponent(options.lnk);
+  onLoad(options) {
     this.setData({
-      title: '晴天钟:' + options.name,
       loading: true
     });
-    app.requestWithAuth({
-      url: url,
+    wx.setNavigationBarTitle({
+      title: '晴天钟:' + app.globalData.currentLocation.name,
+    });
+    app.applyRelWithAuth(app.globalData.currentLocation, {
+      rel: '7timer',
       method: 'GET',
       success: (res) => {
         console.log('received response', res);
@@ -79,6 +148,19 @@ Page({
       }
     })
   },
+  onShareAppMessage() {
+    if (app.globalData.currentLocation == null) {
+
+      return {
+        title: '佚仙天文',
+        path: '/index/index'
+      };
+    }
+    return {
+      title: app.globalData.currentLocation.name + ' 天气情况',
+      path: '/index/index?location_id=' + app.globalData.currentLocation.location_id
+    }
+  },
   switchTab(evt) {
     this.setData({
       activeTab: evt.target.dataset.index
@@ -89,6 +171,7 @@ Page({
     let pageThis = this;
     try {
       let initTime = new Date(data.init_time);
+
       function addZero(num) {
         return ('00' + num).substr(-2);
       }
@@ -103,7 +186,7 @@ Page({
         serie.rhContent = rhContent == null ? '' : rhContent.content;
         serie.wind10m.level = serie.wind10m.speed < 4 ? 0 :
           serie.wind10m.speed == 4 ? 1 :
-            serie.wind10m.speed == 5 ? 2 : 3;
+          serie.wind10m.speed == 5 ? 2 : 3;
         serie.liftLevel = 0;
         if (serie.lifted_index <= -1) {
           serie.liftLevel = 1;
@@ -122,17 +205,28 @@ Page({
       let hours = data.dataseries.map(serie => serie.dailyHour).filter((val, index, self) => self.indexOf(val) === index).sort((a, b) => a - b);
       let dates = data.dataseries.map(serie => serie.dateString).filter((val, index, self) => self.indexOf(val) === index).sort((a, b) => new Date(a) - new Date(b));
 
-      let info = { init_time: initTime.toLocaleString(), dates: [], hourColumns: hours };
+      let info = {
+        init_time: initTime.toLocaleString(),
+        dates: [],
+        hourColumns: hours
+      };
       for (let datestr of dates) {
         let dt = new Date(datestr);
         let dateStringShort = addZero(dt.getMonth() + 1) + '-' + addZero(dt.getDate());
-        let dateRow = { series: [], date: datestr, shortdate: dateStringShort, weekday: weeks[dt.getDay()] };
+        let dateRow = {
+          series: [],
+          date: datestr,
+          shortdate: dateStringShort,
+          weekday: weeks[dt.getDay()]
+        };
         for (let hour of hours) {
           let result = data.dataseries.filter(serie => serie.dailyHour === hour && serie.dateString === datestr);
           if (result.length) {
             dateRow.series.push(result[0])
           } else {
-            dateRow.series.push({ nodata: true })
+            dateRow.series.push({
+              nodata: true
+            })
           }
         }
         info.dates.push(dateRow)

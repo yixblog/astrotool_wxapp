@@ -53,6 +53,10 @@
     </view>
   </view>
   <view class="toolbox page-part">
+    <view class="tool" bindtap="openObservatory" wx:if="currentLocation.observer_flag">
+      <image class="icon" src="/images/observatory.svg" mode="widthFix"></image>
+      <view class="text">天文台</view>
+    </view>
     <view class="tool" bindtap="openSevenTimer">
       <image class="icon" src="/images/7timer.png" mode="widthFix"></image>
       <view class="text">晴天钟</view>
@@ -61,7 +65,7 @@
       <image src="/images/correct.svg" class="icon" mode="widthFix"></image>
       <view class="text">设为默认</view>
     </view>
-    <view class="tool" bindtap="showModifyNameDialog" wx:if="{{currentLocation.self_flag}}">
+    <view class="tool" bindtap="showModifyNameDialog" wx:if="{{currentLocation._links.editname}}">
       <image src="/images/edit.svg" class="icon" mode="widthFix"></image>
       <view class="text">修改名称</view>
     </view>
@@ -89,6 +93,7 @@
       <view class="text">新增地点</view>
     </view>
   </view>
+  <canvas canvas-id="hourlyChart" id="hourlyChart" class="charts" bindtouchstart="touchChart" bindtouchend="touchChartEnd" disable-scroll="true" bindtouchmove="touchMoveChart"></canvas>
   <mp-cells data-weui-theme="dark">
     <mp-cell style="font-size: 0.8rem" wx:key="date" wx:for="{{daily}}">
       <view>{{item.cond_txt_d}} {{item.tmp_min}}℃~{{item.tmp_max}}℃</view>
@@ -106,4 +111,5 @@
   <mp-dialog data-weui-theme="dark" title="确认删除地点" show="{{deleteDialog.show}}" bindbuttontap="confirmDelete" buttons="{{[{text:'取消'},{text:'确认'}]}}">
     <view value="确认删除：{{currentLocation.name}}"></view>
   </mp-dialog>
+  <mp-actionSheet data-weui-theme="dark" bindactiontap="viewStoreLocation" show="{{locationStore.show}}" actions="{{locationStore.actions}}" title="收藏地点"></mp-actionSheet>
 </view>

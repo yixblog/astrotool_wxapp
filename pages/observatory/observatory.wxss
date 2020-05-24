@@ -1,0 +1,30 @@
+/* pages/observatory/observatory.wxss */
+
+.part-box {
+  width: 100%;
+  padding: 0 0.5rem;
+}
+
+.part-box::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.live-box video{
+  width: 100%;
+}
+
+.choose-row{
+  width: 100%;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.choose-row .btn{
+  display: inline-block;
+  white-space: nowrap;
+  border: 1px solid #fff;
+  padding: 5rpx;
+}
+

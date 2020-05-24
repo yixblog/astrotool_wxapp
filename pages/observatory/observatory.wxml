@@ -1,0 +1,25 @@
+<view class="container">
+  <view class="live-box part-box" wx:if="{{currentLive}}">
+    <video src="{{currentLive.live_url}}"></video>
+    <view class="choose-row">
+      <view class="btn" wx:for="{{observatory.lives}}" wx:key="live_id">{{item.name}}</view>
+    </view>
+  </view>
+  <view class="status-box part-box" wx:if="{{observatory.current}}">
+    <view>Temperature: {{observatory.current.temperature||'--'}}℃</view>
+    <view>Humidity: {{observatory.current.humidity||'--'}}%</view>
+    <view>Wind: {{observatory.current.wind_spd}}m/s</view>
+  </view>
+  <view class="dev-box part-box">
+    <view class="apikey">{{observatory.api_key}}</view>
+    <view class="choose-row">
+      <view class="btn" bindtap="copyApiKey">复制</view>
+      <view class="btn" bindtap="refreshApiKey">刷新</view>
+    </view>
+  </view>
+  <view wx:if="{{observatory.logs}}" class="canvas-box">
+    <canvas canvas-id="historyWeather" id="historyWeather" class="charts" 
+    bindtouchstart="touchChart" bindtouchend="touchChartEnd" disable-scroll="true"
+     bindtouchmove="touchMoveChart"></canvas>
+  </view>
+</view>

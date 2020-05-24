@@ -1,7 +1,7 @@
 App({
-  onLaunch: function() {
+  onLaunch: function () {
     let thisApp = this;
-    this.checkAuth(function() {
+    this.checkAuth(function () {
       thisApp.loadRoots();
     });
   },
@@ -52,15 +52,15 @@ App({
     if (!representation._links[requestObj.rel]) {
       wx.showModal({
         title: 'Error',
-        content: 'rel '+requestObj.rel+' not found',
+        content: 'rel ' + requestObj.rel + ' not found',
       });
       wx.hideLoading();
       return;
     }
     let url = representation._links[requestObj.rel].href;
-    if (requestObj.query){
-      for (let k in requestObj.query){
-        if(requestObj.query[k]!=null){
+    if (requestObj.query) {
+      for (let k in requestObj.query) {
+        if (requestObj.query[k] != null) {
           url = url + (url.indexOf('?') > 0 ? '&' : '?') + k + '=' + requestObj.query[k]
         }
       }
@@ -108,7 +108,7 @@ App({
             thisApp.requestWithAuth(requestObj);
           })
         } else {
-          if (originFail){
+          if (originFail) {
             originFail(res);
             return;
           }
@@ -147,6 +147,30 @@ App({
         thisApp.globalData.authPromise = [];
       }
     }, true)
+  },
+  loadMyLocations(shareFlag, locationId, locationsCallback) {
+    let thisApp = this;
+    this.requestWithAuth({
+      rootRel: 'locations',
+      method: 'GET',
+      query: {
+        addition_location_id: shareFlag ? locationId : null
+      },
+      success: (res) => {
+        let locations = res.data.locations;
+
+        for (let location of locations) {
+          let longitudeSymbol = location.longitude > 0 ? 'E' : 'W';
+          let latitudeSymbol = location.latitude > 0 ? 'N' : 'S';
+          location.position = location.longitude.toFixed(4) + longitudeSymbol + ',' + location.latitude.toFixed(4) + latitudeSymbol;
+          location.arrow = true;
+        }
+        thisApp.globalData.locations = locations;
+        if (typeof locationsCallback === 'function') {
+          locationsCallback(res);
+        }
+      }
+    })
   },
   globalData: {
     host: "https://miniapp.yixastro.com",
