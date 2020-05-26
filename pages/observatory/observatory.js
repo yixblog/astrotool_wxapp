@@ -1,6 +1,6 @@
 // pages/observatory/observatory.js
 const app = getApp()
-import uCharts from '../../utils/u-charts.min.js';
+import uCharts from '../../utils/u-charts.js';
 let historyChart;
 Page({
 
@@ -15,6 +15,8 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    this.cWidth = wx.getSystemInfoSync().windowWidth;
+    this.cHeight = 240;
     this.updateStatus()
   },
   updateStatus(){
@@ -23,6 +25,8 @@ Page({
       rel: 'observatory_status',
       method: 'GET',
       success: res => {
+        let dt = res.data;
+        dt.location_id = app.globalData.currentLocation.location_id;
         thisPage.setData({
           observatory: res.data
         });
@@ -144,11 +148,11 @@ Page({
       }
     };
     console.info('chart', chartObj)
-    historyChart = uCharts(chartObj)
+    historyChart = new uCharts(chartObj)
   },
   copyApiKey(){
     wx.setClipboardData({
-      data: this.data.observatory.api_key,
+      data: 'locationId: '+app.globalData.currentLocation.location_id+'\r\napikey: '+this.data.observatory.api_key,
       success (res) {
         wx.getClipboardData({
           success (res) {

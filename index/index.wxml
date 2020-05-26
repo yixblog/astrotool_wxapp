@@ -53,7 +53,7 @@
     </view>
   </view>
   <view class="toolbox page-part">
-    <view class="tool" bindtap="openObservatory" wx:if="currentLocation.observer_flag">
+    <view class="tool" bindtap="openObservatory" wx:if="{{currentLocation.observer_flag}}">
       <image class="icon" src="/images/observatory.svg" mode="widthFix"></image>
       <view class="text">天文台</view>
     </view>
@@ -75,6 +75,10 @@
       <image src="/images/share.svg" class="icon" mode="widthFix"></image>
       <view class="text">分享</view>
     </button>
+    <view class="tool" bindtap="showShareQQImg">
+       <image src="/images/share.svg" class="icon" mode="widthFix"></image>
+      <view class="text">分享到QQ</view>
+    </view>
 
     <view class="tool" bindtap="showConfirmDelete" wx:if="{{currentLocation.self_flag}}">
       <image src="/images/trush.svg" class="icon" mode="widthFix"></image>

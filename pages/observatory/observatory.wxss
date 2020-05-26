@@ -2,7 +2,7 @@
 
 .part-box {
   width: 100%;
-  padding: 0 0.5rem;
+  padding: 1rem 0.5rem;
 }
 
 .part-box::after {
@@ -26,5 +26,11 @@
   white-space: nowrap;
   border: 1px solid #fff;
   padding: 5rpx;
+  margin-right: 5px;
+  min-width: 100rpx;
+  text-align: center;
 }
 
+.dev-box{
+  background: #000;
+}

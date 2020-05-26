@@ -10,8 +10,9 @@
     <view>Humidity: {{observatory.current.humidity||'--'}}%</view>
     <view>Wind: {{observatory.current.wind_spd}}m/s</view>
   </view>
-  <view class="dev-box part-box">
-    <view class="apikey">{{observatory.api_key}}</view>
+  <view class="dev-box part-box" wx:if="{{observatory.self_flag}}">
+    <view class="apikey">LocationID: {{observatory.location_id}}</view>
+    <view class="apikey">API Key: {{observatory.api_key}}</view>
     <view class="choose-row">
       <view class="btn" bindtap="copyApiKey">复制</view>
       <view class="btn" bindtap="refreshApiKey">刷新</view>

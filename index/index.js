@@ -39,9 +39,21 @@ Page({
     }
   },
   onLoad(query) {
+    let pageThis = this;
+    
     this.cWidth = wx.getSystemInfoSync().windowWidth;
     this.cHeight = 240;
-    if (query.location_id) {
+    if (query.scene) {
+      const scene = decodeURIComponent(query.scene);
+      app.requestWithAuth({
+        rootRel: 'util_convert_uuid',
+        method: 'GET',
+        query: {
+          scene: scene
+        },
+        success: res => pageThis.loadMyLocations(res.data.uuid, true)
+      })
+    } else if (query.location_id) {
       this.loadMyLocations(query.location_id, true);
     } else {
       this.loadMyLocations();
@@ -50,7 +62,7 @@ Page({
   },
   loadMyLocations(locationId, shareFlag) {
     let pageThis = this;
-    app.loadMyLocations(locationId,shareFlag,res=>{
+    app.loadMyLocations(locationId, shareFlag, res => {
       let locations = app.globalData.locations;
       pageThis.setData({
         locations: locations,
@@ -239,8 +251,8 @@ Page({
             position: 'left',
             axisLine: true,
             title: '℃',
-            min: Math.min(...hourlyArr.map(dt => parseInt(dt.tmp)))*0.8,
-            max: Math.max(...hourlyArr.map(dt => parseInt(dt.tmp)))*1.2
+            min: Math.min(...hourlyArr.map(dt => parseInt(dt.tmp))) * 0.8,
+            max: Math.max(...hourlyArr.map(dt => parseInt(dt.tmp))) * 1.2
           },
           {
             position: 'right',
@@ -277,7 +289,7 @@ Page({
     console.info('chart', chartObj)
     hourlyChart = new uCharts(chartObj)
   },
-  openObservatory(){
+  openObservatory() {
     wx.navigateTo({
       url: '/pages/observatory/observatory',
     })
@@ -422,5 +434,10 @@ Page({
         }
       });
     }
-  }
+  },
+  showShareQQImg() {
+    wx.previewImage({
+      urls: [this.data.currentLocation._links.share_qq.href],
+    })
+  },
 })
