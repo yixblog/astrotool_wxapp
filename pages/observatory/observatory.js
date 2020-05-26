@@ -1,6 +1,6 @@
 // pages/observatory/observatory.js
 const app = getApp()
-import uCharts from '../../utils/u-charts.js';
+import uCharts from '../../utils/u-charts.min.js';
 let historyChart;
 Page({
 
