@@ -34,3 +34,8 @@
 .dev-box{
   background: #000;
 }
+.dev-box .apikey{
+  white-space: normal;
+  text-overflow: ellipsis;
+  font-size: 0.6rem;
+}

@@ -19,7 +19,7 @@ Page({
     this.cHeight = 240;
     this.updateStatus()
   },
-  updateStatus(){
+  updateStatus() {
     let thisPage = this;
     app.applyRelWithAuth(app.globalData.currentLocation, {
       rel: 'observatory_status',
@@ -27,23 +27,39 @@ Page({
       success: res => {
         let dt = res.data;
         dt.location_id = app.globalData.currentLocation.location_id;
+        if (dt.current) {
+          let tzoffset = (new Date()).getTimezoneOffset() * 60000;
+          dt.current.record_time_str = new Date(dt.current.record_time - tzoffset).toISOString().replace(/[TZ]/g,' ').trim();
+        }
         thisPage.setData({
-          observatory: res.data
+          observatory: dt
         });
         if (res.data.lives && res.data.lives.length) {
           thisPage.setData({
             currentLive: res.data.lives[0]
           })
         }
-        if (res.data.logs && res.data.logs.length){
+        if (res.data.logs && res.data.logs.length) {
           thisPage.initHistoryChart(res.data.logs)
         }
       }
     })
   },
-
-  initHistoryChart(hourlyArr){
+  switchLiveView(e) {
+    console.log(e);
+    let id = e.target.dataset.itemId;
+    if (id !== this.data.currentLive.live_id) {
+      let live = this.data.observatory.lives.filter(live => live.live_id === id)[0];
+      if (live) {
+        this.setData({
+          currentLive: live
+        })
+      }
+    }
+  },
+  initHistoryChart(hourlyArr) {
     let thisPage = this;
+    let tzoffset = (new Date()).getTimezoneOffset() * 60000;
     let chartObj = {
       $this: thisPage,
       canvasId: 'historyWeather',
@@ -61,7 +77,7 @@ Page({
       dataLabel: true,
       animation: true,
       enableScroll: true,
-      categories: hourlyArr.map(dt => new Date(dt.record_time).toISOString().substring(11,19)),
+      categories: hourlyArr.map(dt => new Date(dt.record_time - tzoffset).toISOString().substring(11, 19)),
       series: [{
           name: '温度',
           type: 'line',
@@ -107,8 +123,8 @@ Page({
             position: 'left',
             axisLine: true,
             title: '℃',
-            min: Math.min(...hourlyArr.map(dt => dt.temperature))*0.8,
-            max: Math.max(...hourlyArr.map(dt => dt.temperature))*1.2+1
+            min: Math.min(...hourlyArr.map(dt => dt.temperature)) * 0.8,
+            max: Math.max(...hourlyArr.map(dt => dt.temperature)) * 1.2 + 1
           },
           {
             position: 'right',
@@ -119,8 +135,8 @@ Page({
           },
           {
             disabled: true,
-            min: Math.min(...hourlyArr.map(dt=>dt.wind_spd))*0.8,
-            max: Math.max(...hourlyArr.map(dt=>dt.wind_spd))*1.2+1
+            min: Math.min(...hourlyArr.map(dt => dt.wind_spd)) * 0.8,
+            max: Math.max(...hourlyArr.map(dt => dt.wind_spd)) * 1.2 + 1
           }
         ]
       },
@@ -150,12 +166,12 @@ Page({
     console.info('chart', chartObj)
     historyChart = new uCharts(chartObj)
   },
-  copyApiKey(){
+  copyApiKey() {
     wx.setClipboardData({
-      data: 'locationId: '+app.globalData.currentLocation.location_id+'\r\napikey: '+this.data.observatory.api_key,
-      success (res) {
+      data: 'locationId: ' + app.globalData.currentLocation.location_id + '\r\napikey: ' + this.data.observatory.api_key,
+      success(res) {
         wx.getClipboardData({
-          success (res) {
+          success(res) {
             wx.showToast({
               title: '已复制到剪切板',
             })
@@ -164,17 +180,17 @@ Page({
       }
     })
   },
-  refreshApiKey(){
+  refreshApiKey() {
     let pageThis = this;
     wx.showModal({
       title: '确认操作',
       content: '当前操作会导致旧api key立刻失效',
-      success(res){
-        if(res.confirm){
-          app.applyRelWithAuth(app.globalData.currentLocation,{
-            rel:'refresh_apikey',
+      success(res) {
+        if (res.confirm) {
+          app.applyRelWithAuth(app.globalData.currentLocation, {
+            rel: 'refresh_apikey',
             method: 'PUT',
-            success:res=>pageThis.updateStatus()
+            success: res => pageThis.updateStatus()
           })
         }
       }

@@ -29,6 +29,10 @@ page,view,scroll-view,swiper,swiper-item,movable-area,movable-view,cover-view,co
   border: 1px solid #fff;
   border-radius: 3px;
 }
+.btn.active{
+  background: #aaa;
+  color: #000;
+}
 .btn.btn-warning{
   color: red;
 }
@@ -49,4 +53,13 @@ page,view,scroll-view,swiper,swiper-item,movable-area,movable-view,cover-view,co
   width: 100%;
   display: block;
   height: 240px;
+}
+
+.row {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.row>.col {
+  flex: 1;
 }

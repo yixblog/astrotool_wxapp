@@ -2,15 +2,22 @@
   <view class="live-box part-box" wx:if="{{currentLive}}">
     <video src="{{currentLive.live_url}}"></video>
     <view class="choose-row">
-      <view class="btn" wx:for="{{observatory.lives}}" wx:key="live_id">{{item.name}}</view>
+      <view class="btn {{currentLive.live_id==item.live_id?'active':''}}" wx:for="{{observatory.lives}}" wx:key="live_id" data-item-id="{{item.live_id}}" bindtap="switchLiveView">{{item.name}}</view>
     </view>
   </view>
   <view class="status-box part-box" wx:if="{{observatory.current}}">
-    <view>Temperature: {{observatory.current.temperature||'--'}}℃</view>
-    <view>Humidity: {{observatory.current.humidity||'--'}}%</view>
-    <view>Wind: {{observatory.current.wind_spd}}m/s</view>
+  <view class="row">
+  <view class="col">当前气象（{{observatory.current.record_time_str}}）</view>
+  </view>
+  <view class="row">
+   <view class="col">🌡: {{observatory.current.temperature||'--'}}℃</view>
+    <view class="col">💧: {{observatory.current.humidity||'--'}}%</view>
+    <view class="col">💨: {{observatory.current.wind_spd}}m/s</view>
+  </view>
+   
   </view>
   <view class="dev-box part-box" wx:if="{{observatory.self_flag}}">
+    <view>接入参数</view>
     <view class="apikey">LocationID: {{observatory.location_id}}</view>
     <view class="apikey">API Key: {{observatory.api_key}}</view>
     <view class="choose-row">
