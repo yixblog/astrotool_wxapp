@@ -59,6 +59,7 @@
   background: #000;
   padding: 3rpx 0;
   min-height: 46rpx;
+  margin: 0;
 }
 
 .row>.column {

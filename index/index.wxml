@@ -100,7 +100,10 @@
   <canvas canvas-id="hourlyChart" id="hourlyChart" class="charts" bindtouchstart="touchChart" bindtouchend="touchChartEnd" disable-scroll="true" bindtouchmove="touchMoveChart"></canvas>
   <mp-cells data-weui-theme="dark">
     <mp-cell style="font-size: 0.8rem" wx:key="date" wx:for="{{daily}}">
-      <view>{{item.cond_txt_d}} {{item.tmp_min}}℃~{{item.tmp_max}}℃</view>
+      <view>
+      <image class="weather-symbol" mode="widthFix" src="https://images-1258557364.cos.ap-beijing.myqcloud.com/miniapp/images/heweather/{{item.cond_code_d}}.png"></image>
+      <image class="weather-symbol" mode="widthFix" src="https://images-1258557364.cos.ap-beijing.myqcloud.com/miniapp/images/heweather/{{item.cond_code_n}}.png"></image>
+      {{item.cond_txt_d}} ~ {{item.cond_txt_n}} {{item.tmp_min}}℃~{{item.tmp_max}}℃</view>
       <view slot="footer">{{item.date}}</view>
     </mp-cell>
   </mp-cells>

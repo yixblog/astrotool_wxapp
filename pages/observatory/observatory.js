@@ -60,6 +60,11 @@ Page({
   initHistoryChart(hourlyArr) {
     let thisPage = this;
     let tzoffset = (new Date()).getTimezoneOffset() * 60000;
+    let minTemp = Math.round(Math.min(...hourlyArr.map(dt => dt.temperature)) * 0.8);
+    let maxTemp = Math.round(Math.max(...hourlyArr.map(dt => dt.temperature)) * 1.2);
+    if (maxTemp - minTemp < 15) {
+      minTemp = maxTemp - 15;
+    }
     let chartObj = {
       $this: thisPage,
       canvasId: 'historyWeather',
@@ -123,8 +128,8 @@ Page({
             position: 'left',
             axisLine: true,
             title: '℃',
-            min: Math.min(...hourlyArr.map(dt => dt.temperature)) * 0.8,
-            max: Math.max(...hourlyArr.map(dt => dt.temperature)) * 1.2 + 1
+            min: minTemp,
+            max: maxTemp
           },
           {
             position: 'right',

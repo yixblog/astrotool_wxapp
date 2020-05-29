@@ -69,6 +69,11 @@
   width: 100%;
 }
 
+.weather-symbol{
+  width: 1.1rem;
+  display: inline-block;
+}
+
 .weather-box .weather-cond .weather-cond-name {
   text-align: center;
 }

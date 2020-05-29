@@ -40,7 +40,7 @@ Page({
   },
   onLoad(query) {
     let pageThis = this;
-    
+
     this.cWidth = wx.getSystemInfoSync().windowWidth;
     this.cHeight = 240;
     if (query.scene) {
@@ -181,6 +181,11 @@ Page({
       hourly: hourlyArr
     });
     let thisPage = this;
+    let minTemp = Math.round(Math.min(...hourlyArr.map(dt => parseInt(dt.tmp))) * 0.8);
+    let maxTemp = Math.round(Math.max(...hourlyArr.map(dt => parseInt(dt.tmp))) * 1.2);
+    if (maxTemp - minTemp < 15) {
+      minTemp = maxTemp - 15;
+    }
     let chartObj = {
       $this: thisPage,
       canvasId: 'hourlyChart',
@@ -251,8 +256,8 @@ Page({
             position: 'left',
             axisLine: true,
             title: '℃',
-            min: Math.min(...hourlyArr.map(dt => parseInt(dt.tmp))) * 0.8,
-            max: Math.max(...hourlyArr.map(dt => parseInt(dt.tmp))) * 1.2
+            min: minTemp,
+            max: maxTemp
           },
           {
             position: 'right',
