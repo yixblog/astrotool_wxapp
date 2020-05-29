@@ -148,6 +148,9 @@ Page({
       }
     })
   },
+  onPullDownRefresh(){
+    this.onLoad()
+  },
   onShareAppMessage() {
     if (app.globalData.currentLocation == null) {
 

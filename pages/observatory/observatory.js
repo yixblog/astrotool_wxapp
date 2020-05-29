@@ -19,6 +19,9 @@ Page({
     this.cHeight = 240;
     this.updateStatus()
   },
+  onPullDownRefresh(){
+    this.updateStatus()
+  },
   updateStatus() {
     let thisPage = this;
     app.applyRelWithAuth(app.globalData.currentLocation, {

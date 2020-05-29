@@ -38,6 +38,9 @@ Page({
       path: '/index/index?location_id=' + app.globalData.currentLocation.location_id
     }
   },
+  onPullDownRefresh(){
+    this.loadMyLocations(this.data.currentLocation.location_id)
+  },
   onLoad(query) {
     let pageThis = this;
 
